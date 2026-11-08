@@ -1,0 +1,14 @@
+<%- include('partials/header', { title: title }) %>
+<%- include('partials/navbar') %>
+
+<main class="container">
+  <h1>Dashboard</h1>
+  <div class="cards">
+    <a class="card" href="/menu"><span class="angka"><%= total.menu %></span><span>Menu</span></a>
+    <a class="card" href="/paket"><span class="angka"><%= total.paket %></span><span>Paket</span></a>
+    <a class="card" href="/pelanggan"><span class="angka"><%= total.pelanggan %></span><span>Pelanggan</span></a>
+    <a class="card" href="/pemesanan"><span class="angka"><%= total.pemesanan %></span><span>Pemesanan</span></a>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

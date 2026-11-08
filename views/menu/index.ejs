@@ -1,0 +1,60 @@
+<%- include('../partials/header', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<main class="container">
+  <h1>Daftar Menu</h1>
+
+  <% if (pesan) { %>
+    <p class="alert"><%= pesan %></p>
+  <% } %>
+
+  <p><a href="/menu/tambah" class="btn">+ Tambah Menu</a></p>
+
+  <% if (menus.length === 0) { %>
+    <p>Belum ada menu. Silakan tambah menu baru.</p>
+  <% } else { %>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Gambar</th>
+            <th>Nama Menu</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Deskripsi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% menus.forEach(function (m, i) { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td>
+                <% if (m.gambar) { %>
+                  <img src="<%= m.gambar.startsWith('http') ? m.gambar : '/images/' + m.gambar %>"
+                       alt="<%= m.nama_menu %>" width="60">
+                <% } else { %>-<% } %>
+              </td>
+              <td><%= m.nama_menu %></td>
+              <td><%= m.kategori %></td>
+              <td>Rp <%= Number(m.harga).toLocaleString('id-ID') %></td>
+              <td><%= m.stok %></td>
+              <td><%= m.deskripsi || '-' %></td>
+              <td>
+                <a href="/menu/edit/<%= m.id %>">Edit</a>
+                <form action="/menu/hapus/<%= m.id %>" method="POST" style="display:inline"
+                      onsubmit="return confirm('Hapus menu ini?')">
+                  <button type="submit">Hapus</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</main>
+
+<%- include('../partials/footer') %>
