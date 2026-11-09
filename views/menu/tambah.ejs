@@ -2,49 +2,26 @@
 <%- include('../partials/navbar') %>
 
 <main class="container">
-  <h1>Tambah Menu</h1>
+  <h1>Tambah menu</h1>
 
-  <% if (errors.length > 0) { %>
-    <ul class="alert">
-      <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
-    </ul>
+  <% if (errors.length) { %>
+    <div class="pesan error">
+      <ul>
+        <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
+      </ul>
+    </div>
   <% } %>
 
-  <form action="/menu/tambah" method="POST">
-    <p>
-      <label for="nama_menu">Nama menu</label><br>
-      <input type="text" id="nama_menu" name="nama_menu" maxlength="100" required
-             value="<%= menu.nama_menu || '' %>">
-    </p>
-    <p>
-      <label for="kategori">Kategori</label><br>
-      <select id="kategori" name="kategori" required>
-        <% kategoriList.forEach(function (k) { %>
-          <option value="<%= k %>" <%= menu.kategori === k ? 'selected' : '' %>><%= k %></option>
-        <% }) %>
-      </select>
-    </p>
-    <p>
-      <label for="harga">Harga (Rp)</label><br>
-      <input type="number" id="harga" name="harga" min="0" step="100" required
-             value="<%= menu.harga ?? '' %>">
-    </p>
-    <p>
-      <label for="stok">Stok</label><br>
-      <input type="number" id="stok" name="stok" min="0" step="1" required
-             value="<%= menu.stok ?? 0 %>">
-    </p>
-    <p>
-      <label for="deskripsi">Deskripsi</label><br>
-      <textarea id="deskripsi" name="deskripsi" rows="3"><%= menu.deskripsi || '' %></textarea>
-    </p>
-    <p>
-      <label for="gambar">Gambar (nama file atau URL)</label><br>
-      <input type="text" id="gambar" name="gambar" maxlength="255"
-             value="<%= menu.gambar || '' %>">
-    </p>
-    <button type="submit">Simpan</button>
-    <a href="/menu">Batal</a>
+  <form action="/menu" method="POST" enctype="multipart/form-data">
+    <%- include('_form') %>
+
+    <div class="form-group">
+      <label for="gambar">Gambar (JPG atau PNG, maksimal 2 MB)</label>
+      <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg">
+    </div>
+
+    <button type="submit" class="btn">Simpan menu</button>
+    <a href="/menu" class="btn btn-batal">Kembali</a>
   </form>
 </main>
 

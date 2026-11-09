@@ -1,13 +1,13 @@
 const express = require('express');
-const menuController = require('../controllers/menuController');
-
 const router = express.Router();
+const MenuController = require('../controllers/menuController');
+const { uploadMenu } = require('../middleware/uploadMenu');
 
-router.get('/', menuController.index);
-router.get('/tambah', menuController.tambahForm);
-router.post('/tambah', menuController.store);
-router.get('/edit/:id', menuController.editForm);
-router.post('/edit/:id', menuController.update);
-router.post('/hapus/:id', menuController.destroy);
+router.get('/', MenuController.index);
+router.get('/tambah', MenuController.tambahForm);
+router.post('/', uploadMenu, MenuController.store);
+router.get('/:id/edit', MenuController.editForm);
+router.put('/:id', uploadMenu, MenuController.update);
+router.delete('/:id', MenuController.destroy);
 
 module.exports = router;
