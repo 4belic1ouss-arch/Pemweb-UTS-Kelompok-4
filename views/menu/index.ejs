@@ -1,67 +1,92 @@
-<%- include('../partials/header', { title: title }) %>
+
+<%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
 <main class="container">
-  <h1>Daftar menu</h1>
+  <h1>Daftar Menu</h1>
 
-  <% if (sukses) { %><div class="pesan sukses"><%= sukses %></div><% } %>
-  <% if (error) { %><div class="pesan error"><%= error %></div><% } %>
+  <% if (pesan) { %>
+    <p><%= pesan %></p>
+  <% } %>
 
-  <form action="/menu" method="GET" class="filter-bar">
-    <input type="text" name="q" placeholder="Cari nama menu" value="<%= filter.q %>">
+  <form action="/menu" method="GET">
+    <input
+      type="text"
+      name="q"
+      placeholder="Cari nama menu"
+      value="<%= filter.q %>"
+    >
+
     <select name="kategori">
-      <option value="">Semua kategori</option>
-      <% kategoriList.forEach(function (k) { %>
-        <option value="<%= k %>" <%= filter.kategori === k ? 'selected' : '' %>><%= k %></option>
+      <option value="">Semua Kategori</option>
+      <% kategoriList.forEach(function (kategori) { %>
+        <option
+          value="<%= kategori %>"
+          <%= filter.kategori === kategori ? 'selected' : '' %>
+        >
+          <%= kategori %>
+        </option>
       <% }) %>
     </select>
-    <button type="submit" class="btn">Terapkan</button>
-    <a href="/menu" class="btn btn-batal">Reset</a>
-    <a href="/menu/tambah" class="btn">Tambah menu</a>
+
+    <button type="submit">Cari</button>
+    <a href="/menu">Reset</a>
   </form>
 
-  <% if (menu.length === 0) { %>
-    <p>Belum ada menu yang cocok. Tambahkan menu baru atau ubah filter pencarian.</p>
+  <p>
+    <a href="/menu/tambah">+ Tambah Menu Baru</a>
+  </p>
+
+  <% if (menus.length === 0) { %>
+    <p>Belum ada menu. Klik Tambah Menu Baru untuk menambahkan menu.</p>
   <% } else { %>
     <table>
       <thead>
         <tr>
+          <th>No</th>
           <th>Gambar</th>
-          <th>Nama</th>
+          <th>Nama Menu</th>
           <th>Kategori</th>
           <th>Harga</th>
           <th>Stok</th>
+          <th>Deskripsi</th>
           <th>Aksi</th>
         </tr>
       </thead>
+
       <tbody>
-        <% menu.forEach(function (m) { %>
+        <% menus.forEach(function (m, i) { %>
           <tr>
+            <td><%= i + 1 %></td>
+
             <td>
               <% if (m.gambar) { %>
-                <img src="/uploads/menu/<%= m.gambar %>" alt="<%= m.nama_menu %>" width="70">
-              <% } else { %>
-                -
-              <% } %>
-            </td>
+                <img
+                src="/uploads/menu/<%= m.gambar %>"
+                width="80"
+                alt="Gambar menu"
+                >
+                <% } else { %>
+                  -
+                  <% } %>
+                </td>
+
+            <td><%= m.nama_menu %></td>
+            <td><%= m.kategori %></td>
+            <td><%= rupiah(m.harga) %></td>
+            <td><%= m.stok %></td>
+            <td><%= m.deskripsi || '-' %></td>
+
             <td>
-              <strong><%= m.nama_menu %></strong>
-              <% if (m.deskripsi_menu) { %><br><small><%= m.deskripsi_menu %></small><% } %>
-            </td>
-            <td><%= m.kategori_menu %></td>
-            <td><%= formatRupiah(m.harga_menu) %></td>
-            <td>
-              <% if (m.stok === 0) { %>
-                <span class="badge badge-habis">Habis</span>
-              <% } else { %>
-                <%= m.stok %>
-              <% } %>
-            </td>
-            <td>
-              <a href="/menu/<%= m.id_menu %>/edit" class="btn">Edit</a>
-              <form action="/menu/<%= m.id_menu %>?_method=DELETE" method="POST" style="display:inline"
-                    onsubmit="return confirm('Hapus menu ini?')">
-                <button type="submit" class="btn btn-hapus">Hapus</button>
+              <a href="/menu/edit/<%= m.id %>">Edit</a>
+
+              <form
+                action="/menu/hapus/<%= m.id %>"
+                method="POST"
+                style="display:inline"
+                onsubmit="return confirm('Yakin ingin menghapus menu ini?')"
+              >
+                <button type="submit">Hapus</button>
               </form>
             </td>
           </tr>

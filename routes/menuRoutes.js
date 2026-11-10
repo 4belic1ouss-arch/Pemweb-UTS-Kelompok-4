@@ -1,13 +1,26 @@
-const express = require('express');
-const router = express.Router();
-const MenuController = require('../controllers/menuController');
-const { uploadMenu } = require('../middleware/uploadMenu');
 
-router.get('/', MenuController.index);
-router.get('/tambah', MenuController.tambahForm);
-router.post('/', uploadMenu, MenuController.store);
-router.get('/:id/edit', MenuController.editForm);
-router.put('/:id', uploadMenu, MenuController.update);
-router.delete('/:id', MenuController.destroy);
+const express = require('express');
+const menuController = require('../controllers/menuController');
+const { uploadGambar } = require('../middleware/upload');
+
+const router = express.Router();
+
+// Menampilkan daftar menu
+router.get('/', menuController.index);
+
+// Form tambah menu
+router.get('/tambah', menuController.tambahForm);
+
+// Menyimpan menu baru
+router.post('/tambah', uploadGambar, menuController.store);
+
+// Form edit menu
+router.get('/edit/:id', menuController.editForm);
+
+// Memperbarui data menu
+router.post('/edit/:id', uploadGambar, menuController.update);
+
+// Menghapus menu
+router.post('/hapus/:id', menuController.destroy);
 
 module.exports = router;

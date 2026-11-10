@@ -1,27 +1,46 @@
-<%- include('../partials/header', { title: title }) %>
+<%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
 <main class="container">
-  <h1>Tambah menu</h1>
+  <h1>Tambah Paket Katering</h1>
 
-  <% if (errors.length) { %>
-    <div class="pesan error">
-      <ul>
-        <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
-      </ul>
-    </div>
+  <% if (errors.length > 0) { %>
+    <ul>
+      <% errors.forEach(error => { %>
+        <li><%= error %></li>
+      <% }) %>
+    </ul>
   <% } %>
 
-  <form action="/menu" method="POST" enctype="multipart/form-data">
-    <%- include('_form') %>
+  <form action="/paket/tambah" method="POST" enctype="multipart/form-data">
 
-    <div class="form-group">
-      <label for="gambar">Gambar (JPG atau PNG, maksimal 2 MB)</label>
-      <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg">
-    </div>
+    <label>Nama Paket</label>
+    <input type="text" name="nama_paket"
+      value="<%= data.nama_paket || '' %>" required>
 
-    <button type="submit" class="btn">Simpan menu</button>
-    <a href="/menu" class="btn btn-batal">Kembali</a>
+    <label>Deskripsi</label>
+    <textarea name="deskripsi"><%= data.deskripsi || '' %></textarea>
+
+    <label>Harga</label>
+    <input type="number" name="harga"
+      value="<%= data.harga || '' %>" min="1" required>
+
+    <label>Kapasitas (orang)</label>
+    <input type="number" name="kapasitas"
+      value="<%= data.kapasitas || '' %>" min="1" required>
+
+    <label>Ketersediaan</label>
+    <select name="tersedia">
+      <option value="1">Tersedia</option>
+      <option value="0">Tidak tersedia</option>
+    </select>
+
+    <label>Gambar Paket</label>
+    <input type="file" name="gambar" accept=".jpg,.jpeg,.png">
+
+    <br><br>
+    <button type="submit">Simpan Paket</button>
+    <a href="/paket">Kembali</a>
   </form>
 </main>
 

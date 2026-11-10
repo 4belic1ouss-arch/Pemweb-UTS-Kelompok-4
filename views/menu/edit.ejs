@@ -1,37 +1,103 @@
-<%- include('../partials/header', { title: title }) %>
+
+<%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
 <main class="container">
-  <h1>Edit menu</h1>
+  <h1>Edit Menu</h1>
 
-  <% if (errors.length) { %>
-    <div class="pesan error">
-      <ul>
-        <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
-      </ul>
-    </div>
+  <% if (errors.length > 0) { %>
+    <ul>
+      <% errors.forEach(function (e) { %>
+        <li><%= e %></li>
+      <% }) %>
+    </ul>
   <% } %>
 
-  <%# _method di query string karena body multipart baru dibaca oleh multer %>
-  <form action="/menu/<%= menu.id_menu %>?_method=PUT" method="POST" enctype="multipart/form-data">
-    <%- include('_form') %>
+  <form action="/menu/edit/<%= menu.id %>" method="POST" enctype="multipart/form-data">
 
-    <div class="form-group">
-      <label>Gambar saat ini</label>
+    <div>
+      <label for="nama_menu">Nama Menu</label>
+      <input
+        type="text"
+        id="nama_menu"
+        name="nama_menu"
+        value="<%= menu.nama_menu || '' %>"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="kategori">Kategori</label>
+      <select id="kategori" name="kategori" required>
+        <% kategoriList.forEach(function (kategori) { %>
+          <option
+            value="<%= kategori %>"
+            <%= menu.kategori === kategori ? 'selected' : '' %>
+          >
+            <%= kategori %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div>
+      <label for="harga">Harga (Rp)</label>
+      <input
+        type="number"
+        id="harga"
+        name="harga"
+        min="1"
+        value="<%= menu.harga || '' %>"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="stok">Stok</label>
+      <input
+        type="number"
+        id="stok"
+        name="stok"
+        min="0"
+        value="<%= menu.stok ?? 0 %>"
+        required
+      >
+    </div>
+
+    <div>
+      <label for="deskripsi">Deskripsi</label>
+      <textarea
+        id="deskripsi"
+        name="deskripsi"
+        rows="3"
+      ><%= menu.deskripsi || '' %></textarea>
+    </div>
+
+    <div>
+      <label for="gambar">Gambar Menu</label>
+
       <% if (menu.gambar) { %>
-        <div><img src="/uploads/menu/<%= menu.gambar %>" alt="<%= menu.nama_menu %>" width="120"></div>
-      <% } else { %>
-        <p>Belum ada gambar.</p>
+        <p>Gambar saat ini:</p>
+        <img
+          src="/uploads/menu/<%= menu.gambar %>"
+          alt="Gambar menu"
+          width="120"
+        >
       <% } %>
+
+      <input
+        type="file"
+        id="gambar"
+        name="gambar"
+        accept="image/*"
+      >
+
+      <small>Kosongkan jika tidak ingin mengganti gambar.</small>
     </div>
 
-    <div class="form-group">
-      <label for="gambar">Ganti gambar (kosongkan jika tidak ingin mengganti)</label>
-      <input type="file" id="gambar" name="gambar" accept="image/png, image/jpeg">
-    </div>
+    <button type="submit">Simpan Perubahan</button>
+    <a href="/menu">Batal</a>
 
-    <button type="submit" class="btn">Simpan perubahan</button>
-    <a href="/menu" class="btn btn-batal">Kembali</a>
   </form>
 </main>
 

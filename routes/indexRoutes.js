@@ -1,3 +1,4 @@
+
 const express = require('express');
 const pool = require('../config/db');
 
@@ -11,7 +12,8 @@ router.get('/', async (req, res, next) => {
       pool.execute('SELECT COUNT(*) AS total FROM pelanggan'),
       pool.execute('SELECT COUNT(*) AS total FROM pemesanan')
     ]);
-    res.render('dashboard', {
+
+    res.render('pemesanan/dashboard', {
       title: 'Dashboard',
       total: {
         menu: menuR[0][0].total,
